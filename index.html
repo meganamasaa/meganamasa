@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Megan Amasa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:          #F7F6F2;
+  --bg-card:     #FFFFFF;
+  --bg-warm:     #EDEAE2;
+  --text:        #1A1917;
+  --text-muted:  #6E6A65;
+  --text-dim:    #B0ABA4;
+  --accent:      #1F3A5F;
+  --jade:        #4A8E7E;
+  --lavender:    #7B68B8;
+  --border:      rgba(26,25,23,0.08);
+  --border-hover:rgba(26,25,23,0.16);
+  --font-d: 'Cormorant Garamond', Georgia, serif;
+  --font-b: 'Syne', system-ui, sans-serif;
+  --font-m: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--font-b); overflow-x: hidden; cursor: none;
+}
+
+/* ——— CURSOR ——— */
+#cursor, #cursor-ring {
+  position: fixed; pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+}
+#cursor { width:7px; height:7px; background:var(--accent); border-radius:50%; transition:transform .12s ease; }
+#cursor-ring { width:30px; height:30px; border:1px solid rgba(31,58,95,.35); border-radius:50%; transition:all .22s ease; }
+body.cg #cursor { transform:translate(-50%,-50%) scale(2.5); }
+body.cg #cursor-ring { width:44px; height:44px; border-color:rgba(31,58,95,.65); }
+
+/* ——— NAV ——— */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  padding:22px 56px; display:flex; align-items:center; justify-content:space-between;
+  transition: background .4s ease, border-color .4s ease;
+  border-bottom:1px solid transparent;
+}
+nav.scrolled { background:rgba(247,246,242,.92); backdrop-filter:blur(20px); border-color:var(--border); }
+.nav-logo { font-family:var(--font-d); font-size:19px; font-weight:400; text-decoration:none; color:var(--text); }
+.nav-links { display:flex; gap:36px; list-style:none; }
+.nav-links a { font-family:var(--font-m); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-muted); text-decoration:none; transition:color .2s; }
+.nav-links a:hover { color:var(--text); }
+
+/* ——— HERO ——— */
+#hero {
+  min-height:100vh; padding:150px 56px 88px;
+  display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);
+  gap:80px; align-items:center;
+  position:relative; overflow:hidden;
+}
+.hero-portrait { width:100%; max-width:460px; justify-self:end; aspect-ratio:4/5; overflow:hidden; opacity:0; animation:fadeUp .65s ease .3s forwards; }
+.hero-portrait img { width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+@media (max-width: 900px) {
+  #hero { grid-template-columns:1fr; gap:40px; padding:130px 32px 60px; }
+  .hero-portrait { max-width:280px; justify-self:start; }
+}
+/* Single very subtle accent wash — far quieter than gradient orbs */
+#hero::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background: radial-gradient(ellipse 60% 70% at 78% 40%, rgba(31,58,95,.055) 0%, transparent 100%);
+}
+
+.hero-eyebrow {
+  font-family:var(--font-m); font-size:10.5px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:28px;
+  display:flex; align-items:center; gap:14px;
+  opacity:0; animation:fadeUp .55s ease .15s forwards;
+}
+.hero-eyebrow::before { content:''; width:28px; height:1px; background:var(--accent); }
+h1.hero-name {
+  font-family:var(--font-d);
+  font-size:clamp(72px,11vw,140px);
+  font-weight:300; line-height:.87; letter-spacing:-.03em;
+  margin-bottom:36px;
+  opacity:0; animation:fadeUp .65s ease .3s forwards;
+}
+h1.hero-name em { font-style:italic; color:var(--accent); display:block; margin-left:clamp(32px,5vw,80px); }
+.hero-roles {
+  font-family:var(--font-m); font-size:13px; letter-spacing:.06em; color:var(--text-muted);
+  margin-bottom:44px; min-height:22px;
+  opacity:0; animation:fadeUp .55s ease .5s forwards;
+}
+.blink { display:inline-block; width:2px; height:13px; background:var(--accent); vertical-align:middle; margin-left:3px; animation:blink 1s step-end infinite; }
+@keyframes blink { 50%{opacity:0} }
+.hero-stmt {
+  font-family:var(--font-d); font-size:clamp(20px,2.4vw,27px);
+  font-weight:400; line-height:1.45; color:var(--text); max-width:540px; margin-bottom:52px;
+  opacity:0; animation:fadeUp .65s ease .68s forwards;
+}
+.hero-ctas {
+  display:flex; gap:14px;
+  opacity:0; animation:fadeUp .55s ease .85s forwards;
+}
+.btn { font-family:var(--font-m); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; padding:13px 26px; text-decoration:none; transition:all .22s ease; display:inline-block; }
+.btn-fill { background:var(--accent); color:#F7F6F2; }
+.btn-fill:hover { background:var(--text); }
+.btn-ghost { color:var(--text-muted); border:1px solid var(--border); }
+.btn-ghost:hover { color:var(--text); border-color:var(--border-hover); }
+.hero-scroll { position:absolute; bottom:40px; left:56px; display:flex; align-items:center; gap:14px; font-family:var(--font-m); font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--text-dim); opacity:0; animation:fadeUp .55s ease 1.2s forwards; }
+.scroll-line { width:44px; height:1px; background:var(--text-dim); transform:scaleX(0); transform-origin:left; animation:grow .55s ease 1.5s forwards; }
+@keyframes grow { to{transform:scaleX(1)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+
+/* ——— SECTION BASE ——— */
+.section { padding:112px 56px; border-top:1px solid var(--border); }
+.section-label { font-family:var(--font-m); font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); margin-bottom:64px; display:flex; align-items:center; gap:14px; }
+.section-label::after { content:''; flex:1; max-width:72px; height:1px; background:var(--accent); opacity:.35; }
+
+/* ——— ABOUT ——— */
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
+.about-headline { font-family:var(--font-d); font-size:clamp(36px,5vw,58px); font-weight:300; line-height:1.15; letter-spacing:-.01em; }
+.about-headline em { font-style:italic; color:var(--accent); }
+.about-link { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-m); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--accent); text-decoration:none; margin-top:36px; border-bottom:1px solid transparent; transition:border-color .2s; }
+.about-link:hover { border-color:var(--accent); }
+.story-block { margin-bottom:44px; }
+.story-block-label { font-family:var(--font-m); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-dim); margin-bottom:18px; }
+.story-item { display:flex; gap:14px; margin-bottom:13px; align-items:baseline; }
+.story-arrow { font-family:var(--font-m); font-size:12px; color:var(--accent); flex-shrink:0; }
+.story-item p { font-size:14.5px; line-height:1.65; color:var(--text); opacity:.82; }
+.story-item a { color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(31,58,95,.28); transition:border-color .2s; }
+.story-item a:hover { border-color:var(--accent); }
+.about-close { font-family:var(--font-d); font-size:17px; font-style:italic; color:var(--text-muted); line-height:1.75; margin-top:36px; padding-top:36px; border-top:1px solid var(--border); }
+
+/* ——— IMPACT ——— */
+#impact { border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.impact-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); }
+.impact-item { background:var(--bg); padding:52px 44px; transition:background .35s ease; }
+.impact-item:hover { background:var(--bg-card); }
+.impact-number { font-family:var(--font-d); font-size:52px; font-weight:300; line-height:1; color:var(--text); margin-bottom:10px; }
+.impact-number sup { font-size:26px; color:var(--accent); vertical-align:super; }
+.impact-label { font-family:var(--font-m); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); }
+
+/* ——— PROJECTS ——— */
+.projects-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); }
+#work .projects-grid { grid-template-columns:repeat(2,1fr); }
+.project-card { background:var(--bg); padding:44px 40px; position:relative; overflow:hidden; transition:background .35s ease; }
+.project-card:hover { background:var(--bg-card); }
+.project-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--card-accent,var(--accent)); transform:scaleX(0); transform-origin:left; transition:transform .4s ease; }
+.project-card:hover::after { transform:scaleX(1); }
+.card-company { font-family:var(--font-m); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-dim); margin-bottom:14px; }
+.card-name { font-family:var(--font-d); font-size:30px; font-weight:400; line-height:1.1; color:var(--text); margin-bottom:12px; }
+.card-tagline { font-size:13.5px; color:var(--text-muted); line-height:1.55; margin-bottom:26px; }
+.card-tags { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:30px; }
+.card-tag { font-family:var(--font-m); font-size:9.5px; letter-spacing:.07em; color:var(--text-dim); padding:4px 9px; border:1px solid var(--border); }
+.card-cta { font-family:var(--font-m); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--card-accent,var(--accent)); display:flex; align-items:center; gap:8px; transition:gap .2s ease; }
+.project-card:hover .card-cta { gap:16px; }
+
+/* ——— TRIPTYCH ——— */
+#interests { padding-bottom:0; overflow:hidden; }
+.triptych { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--border); margin:0 -56px; }
+.pillar { position:relative; overflow:hidden; padding:60px 52px; min-height:520px; display:flex; flex-direction:column; border-right:1px solid var(--border); transition:background .45s ease; }
+.pillar:last-child { border-right:none; }
+.pillar:hover { background:var(--bg-card); }
+.pillar-num { font-family:var(--font-m); font-size:9.5px; letter-spacing:.18em; color:var(--text-dim); margin-bottom:52px; }
+.pillar-art { flex:1; display:flex; align-items:center; justify-content:center; transition:transform .5s cubic-bezier(.25,.46,.45,.94); }
+.pillar:hover .pillar-art { transform:translateY(-8px); }
+.pillar-label { font-family:var(--font-d); font-size:34px; font-weight:300; color:var(--text); margin-top:48px; margin-bottom:4px; }
+.pillar-sub { font-family:var(--font-m); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-dim); margin-bottom:22px; }
+.pillar-pov { font-size:13.5px; line-height:1.78; color:var(--text-muted); max-height:0; overflow:hidden; opacity:0; transition:max-height .5s ease, opacity .42s ease .06s; }
+.pillar:hover .pillar-pov { max-height:140px; opacity:1; }
+.pillar-cta { font-family:var(--font-m); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); display:flex; align-items:center; gap:8px; margin-top:22px; max-height:0; opacity:0; overflow:hidden; transition:max-height .5s ease, opacity .42s ease .1s, gap .2s ease; }
+.pillar:hover .pillar-cta { max-height:30px; opacity:1; gap:16px; }
+
+/* ——— OVERLAY ——— */
+#overlay { position:fixed; inset:0; z-index:500; background:rgba(247,246,242,0.97); backdrop-filter:blur(14px); display:flex; opacity:0; pointer-events:none; transition:opacity .35s ease; }
+#overlay.open { opacity:1; pointer-events:all; }
+#ov-close { position:absolute; top:28px; right:56px; font-family:var(--font-m); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--text-muted); background:none; border:none; cursor:none; z-index:10; transition:color .2s; }
+#ov-close:hover { color:var(--text); }
+#ov-memo { width:44%; padding:76px 52px; overflow-y:auto; border-right:1px solid var(--border); }
+#ov-demo { flex:1; display:flex; align-items:center; justify-content:center; }
+.ov-co { font-family:var(--font-m); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin-bottom:24px; }
+.ov-title { font-family:var(--font-d); font-size:42px; font-weight:300; color:var(--text); line-height:1.08; margin-bottom:32px; }
+.ov-sec { font-family:var(--font-m); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-dim); margin-top:26px; margin-bottom:9px; }
+.ov-body p { font-size:14.5px; line-height:1.8; color:var(--text-muted); }
+.ov-body p + p { margin-top:16px; }
+.ov-body a { color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(31,58,95,.3); transition:border-color .2s; }
+.ov-body a:hover { border-color:var(--accent); }
+.ov-paper-pane { width:calc(100% - 80px); max-width:520px; display:flex; flex-direction:column; gap:18px; }
+.ov-paper-frame { width:100%; height:78vh; border:1px solid var(--border); background:#fff; box-shadow:0 4px 28px rgba(26,25,23,0.08); }
+.ov-paper-pane .ov-demo-btn { align-self:flex-end; }
+.ov-demo-inner { display:flex; flex-direction:column; align-items:center; gap:18px; }
+.ov-demo-label { font-family:var(--font-m); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-dim); }
+.ov-demo-btn { font-family:var(--font-m); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); background:rgba(31,58,95,.1); border:1px solid rgba(31,58,95,.3); padding:12px 26px; text-decoration:none; cursor:none; transition:all .2s; }
+.ov-demo-btn:hover { background:rgba(31,58,95,.18); border-color:var(--accent); }
+
+/* ——— FOOTER ——— */
+footer { padding:52px 56px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.foot-name { font-family:var(--font-d); font-size:24px; font-weight:300; font-style:italic; color:var(--text-muted); }
+.foot-links { display:flex; gap:28px; }
+.foot-links a { font-family:var(--font-m); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-dim); text-decoration:none; transition:color .2s; }
+.foot-links a:hover { color:var(--text); }
+.foot-note { font-family:var(--font-m); font-size:9.5px; color:var(--text-dim); letter-spacing:.07em; }
+
+/* ——— REVEAL ——— */
+.reveal { opacity:0; transform:translateY(20px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.visible { opacity:1; transform:none; }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav id="nav">
+  <a href="#" class="nav-logo">Megan Amasa</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#demos">Demos</a></li>
+    <li><a href="#interests">More</a></li>
+    <li><a href="mailto:meganamasa@gmail.com">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow">Duke University · CS + Entrepreneurship · Class of 2027</div>
+    <h1 class="hero-name">Megan<em>Amasa</em></h1>
+    <div class="hero-roles"><span id="tw"></span><span class="blink"></span></div>
+    <p class="hero-stmt">Technical builder who turns personal pain points into revenue-generating products.</p>
+    <div class="hero-ctas">
+      <a href="#work" class="btn btn-fill">View Work</a>
+      <a href="https://www.linkedin.com/in/meganamasa/" target="_blank" class="btn btn-ghost">LinkedIn →</a>
+    </div>
+  </div>
+  <div class="hero-portrait"><img src="./megan-portrait.jpg" alt="Megan Amasa"></div>
+  <div class="hero-scroll"><span class="scroll-line"></span><span>Scroll</span></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="section-label">About</div>
+  <div class="about-grid">
+    <div class="reveal">
+      <h2 class="about-headline">I find the seam<br>between problem<br>and <em>product.</em></h2>
+      <a href="https://www.linkedin.com/in/meganamasa/" class="about-link" target="_blank">View full profile →</a>
+    </div>
+    <div class="reveal" style="transition-delay:.12s">
+      <div class="story-block">
+        <div class="story-block-label">Technical Builder</div>
+        <div class="story-item"><span class="story-arrow">→</span>
+          <p>Interned at <strong>Fora Travel</strong> on Technical Product → built their <a href="https://www.foratravel.com/c/fora-u" target="_blank">college vertical</a> from 0 to 1 → $30K+ revenue</p></div>
+        <div class="story-item"><span class="story-arrow">→</span>
+          <p>Interned at an <strong>OpenAI-backed startup</strong> as a SWE, building financial data parsing algorithms</p></div>
+        <div class="story-item"><span class="story-arrow">→</span>
+          <p>Studied abroad in Madrid → built <a href="https://mesa-8xvqqvjft-megan-amasas-projects.vercel.app/" target="_blank">Mesa</a> to manage expenses, splitting bills in euros</p></div>
+      </div>
+      <div class="story-block">
+        <div class="story-block-label">Impact Driven</div>
+        <div class="story-item"><span class="story-arrow">→</span>
+          <p>COO of <strong>Campus Enterprises</strong>, Duke's largest student business → $139K+ annual profit, $1M+ total revenue</p></div>
+        <div class="story-item"><span class="story-arrow">→</span>
+          <p>Founded consulting service for local Durham venues, 4 clients, $10K+ client revenue increase</p></div>
+        <div class="story-item"><span class="story-arrow">→</span>
+          <p>Drove 100%+ YOY growth, scaling entertainment division from $40K to $80K+ record revenue</p></div>
+      </div>
+      <p class="about-close">I apply my technical mindset to client-facing challenges: finding real business friction, deeply understanding what's broken, and building solutions that fit within an existing model rather than around it.</p>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- WORK -->
+<section id="work" class="section">
+  <div class="section-label">Work</div>
+  <div class="projects-grid" id="work-grid"></div>
+</section>
+
+<!-- DEMOS -->
+<section id="demos" class="section">
+  <div class="section-label">Demos</div>
+  <div class="projects-grid" id="demos-grid"></div>
+</section>
+
+<!-- INTERESTS TRIPTYCH -->
+<section id="interests" class="section">
+  <div class="section-label">Beyond the build</div>
+  <div class="triptych">
+
+    <!-- AI -->
+    <div class="pillar" data-pillar="ai">
+      <div class="pillar-num">01 — AI</div>
+      <div class="pillar-art">
+        <!-- Attention weight matrix — transformer self-attention pattern -->
+        <!-- Each row = a query token; dot size = attention weight to each key position -->
+        <!-- Peaks shift diagonally — recognizable to anyone who's worked with LLMs -->
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+          <!-- Row 1 (y=18): peak at col 3 -->
+          <circle cx="18"  cy="18" r="1.4" fill="#7B68B8" opacity="0.22"/>
+          <circle cx="39"  cy="18" r="2.2" fill="#7B68B8" opacity="0.35"/>
+          <circle cx="60"  cy="18" r="5.8" fill="#7B68B8" opacity="0.70"/>
+          <circle cx="81"  cy="18" r="1.8" fill="#7B68B8" opacity="0.28"/>
+          <circle cx="102" cy="18" r="1.2" fill="#7B68B8" opacity="0.20"/>
+          <!-- Row 2 (y=39): peak at col 2 -->
+          <circle cx="18"  cy="39" r="1.6" fill="#7B68B8" opacity="0.24"/>
+          <circle cx="39"  cy="39" r="5.5" fill="#7B68B8" opacity="0.66"/>
+          <circle cx="60"  cy="39" r="2.8" fill="#7B68B8" opacity="0.42"/>
+          <circle cx="81"  cy="39" r="1.6" fill="#7B68B8" opacity="0.25"/>
+          <circle cx="102" cy="39" r="1.2" fill="#7B68B8" opacity="0.20"/>
+          <!-- Row 3 (y=60): peak at col 3, ring treatment for center cell -->
+          <circle cx="18"  cy="60" r="1.4" fill="#7B68B8" opacity="0.22"/>
+          <circle cx="39"  cy="60" r="1.8" fill="#7B68B8" opacity="0.28"/>
+          <circle cx="60"  cy="60" r="6"   fill="#7B68B8" fill-opacity="0.13" stroke="#7B68B8" stroke-width="1.1" opacity="0.72"/>
+          <circle cx="81"  cy="60" r="2.5" fill="#7B68B8" opacity="0.38"/>
+          <circle cx="102" cy="60" r="1.4" fill="#7B68B8" opacity="0.22"/>
+          <!-- Row 4 (y=81): peak at col 4 -->
+          <circle cx="18"  cy="81" r="1.4" fill="#7B68B8" opacity="0.20"/>
+          <circle cx="39"  cy="81" r="2.0" fill="#7B68B8" opacity="0.32"/>
+          <circle cx="60"  cy="81" r="3.2" fill="#7B68B8" opacity="0.48"/>
+          <circle cx="81"  cy="81" r="5.5" fill="#7B68B8" opacity="0.64"/>
+          <circle cx="102" cy="81" r="1.6" fill="#7B68B8" opacity="0.25"/>
+          <!-- Row 5 (y=102): peak at col 3 -->
+          <circle cx="18"  cy="102" r="1.2" fill="#7B68B8" opacity="0.20"/>
+          <circle cx="39"  cy="102" r="1.8" fill="#7B68B8" opacity="0.28"/>
+          <circle cx="60"  cy="102" r="5.5" fill="#7B68B8" opacity="0.68"/>
+          <circle cx="81"  cy="102" r="2.0" fill="#7B68B8" opacity="0.32"/>
+          <circle cx="102" cy="102" r="1.2" fill="#7B68B8" opacity="0.20"/>
+        </svg>
+      </div>
+      <div class="pillar-label">AI</div>
+      <div class="pillar-sub">Models Meet Minds</div>
+      <div class="pillar-pov">What draws me into AI is the intersection between AI and consumer behavior — how humans and large language models interact, and how that relationship is evolving as the technology pushes forward. That frontier is the most interesting thing in tech right now.</div>
+      <div class="pillar-cta">Read research →</div>
+    </div>
+
+    <!-- HOLISTIC HEALTH -->
+    <div class="pillar" data-pillar="health">
+      <div class="pillar-num">02 — Holistic Health</div>
+      <div class="pillar-art">
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+          <!-- Leaf outline — pointed oval, very subtle -->
+          <path d="M60 13 Q22 38 22 64 Q22 90 60 107 Q98 90 98 64 Q98 38 60 13 Z"
+            stroke="#4A8E7E" stroke-width="0.8" opacity="0.2" fill="none"/>
+          <!-- Tip dot -->
+          <circle cx="60" cy="13" r="2" fill="#4A8E7E" opacity="0.45"/>
+          <!-- Main stem -->
+          <line x1="60" y1="13" x2="60" y2="107"
+            stroke="#4A8E7E" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
+          <!-- Vein pair 1 -->
+          <line x1="60" y1="30" x2="44" y2="40" stroke="#4A8E7E" stroke-width="0.75" stroke-linecap="round" opacity="0.42"/>
+          <line x1="60" y1="30" x2="76" y2="40" stroke="#4A8E7E" stroke-width="0.75" stroke-linecap="round" opacity="0.42"/>
+          <!-- Vein pair 2 -->
+          <line x1="60" y1="47" x2="36" y2="60" stroke="#4A8E7E" stroke-width="0.75" stroke-linecap="round" opacity="0.42"/>
+          <line x1="60" y1="47" x2="84" y2="60" stroke="#4A8E7E" stroke-width="0.75" stroke-linecap="round" opacity="0.42"/>
+          <!-- Vein pair 3 (widest) -->
+          <line x1="60" y1="64" x2="30" y2="78" stroke="#4A8E7E" stroke-width="0.75" stroke-linecap="round" opacity="0.42"/>
+          <line x1="60" y1="64" x2="90" y2="78" stroke="#4A8E7E" stroke-width="0.75" stroke-linecap="round" opacity="0.42"/>
+          <!-- Vein pair 4 -->
+          <line x1="60" y1="81" x2="40" y2="91" stroke="#4A8E7E" stroke-width="0.65" stroke-linecap="round" opacity="0.34"/>
+          <line x1="60" y1="81" x2="80" y2="91" stroke="#4A8E7E" stroke-width="0.65" stroke-linecap="round" opacity="0.34"/>
+          <!-- Fine secondary veins off pair 2 -->
+          <line x1="48" y1="54" x2="40" y2="50" stroke="#4A8E7E" stroke-width="0.45" opacity="0.24"/>
+          <line x1="72" y1="54" x2="80" y2="50" stroke="#4A8E7E" stroke-width="0.45" opacity="0.24"/>
+          <!-- Fine secondary veins off pair 3 -->
+          <line x1="45" y1="71" x2="36" y2="67" stroke="#4A8E7E" stroke-width="0.45" opacity="0.22"/>
+          <line x1="75" y1="71" x2="84" y2="67" stroke="#4A8E7E" stroke-width="0.45" opacity="0.22"/>
+        </svg>
+      </div>
+      <div class="pillar-label">Holistic Health</div>
+      <div class="pillar-sub">Body as System</div>
+      <div class="pillar-pov">Started in high-school work on youth mental-health policy. I've been thinking about the body as a system ever since — sleep, training, food, light, stress, every input compounds.</div>
+      <div class="pillar-cta">Read research →</div>
+    </div>
+
+    <!-- PILATES -->
+    <div class="pillar">
+      <div class="pillar-num">03 — Pilates</div>
+      <div class="pillar-art">
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+          <circle cx="60" cy="20" r="7.5" stroke="#1F3A5F" stroke-width="1.3" opacity="0.72"/>
+          <line x1="60" y1="27" x2="46" y2="66" stroke="#1F3A5F" stroke-width="1.5" stroke-linecap="round" opacity="0.78"/>
+          <line x1="53" y1="41" x2="79" y2="52" stroke="#1F3A5F" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
+          <line x1="53" y1="47" x2="82" y2="58" stroke="#1F3A5F" stroke-width="1.0" stroke-linecap="round" opacity="0.45"/>
+          <circle cx="46" cy="66" r="2" fill="#1F3A5F" opacity="0.5"/>
+          <line x1="46" y1="66" x2="88" y2="41" stroke="#1F3A5F" stroke-width="1.5" stroke-linecap="round" opacity="0.78"/>
+          <line x1="46" y1="66" x2="92" y2="47" stroke="#1F3A5F" stroke-width="1.2" stroke-linecap="round" opacity="0.58"/>
+          <line x1="88" y1="41" x2="94" y2="38" stroke="#1F3A5F" stroke-width="1.0" stroke-linecap="round" opacity="0.48"/>
+          <line x1="92" y1="47" x2="98" y2="44" stroke="#1F3A5F" stroke-width="0.9" stroke-linecap="round" opacity="0.38"/>
+          <path d="M20 97 Q42 91 60 94 Q78 97 100 91" stroke="#1F3A5F" stroke-width="0.5" opacity="0.17"/>
+          <path d="M16 106 Q42 101 60 104 Q78 107 104 101" stroke="#1F3A5F" stroke-width="0.4" opacity="0.1"/>
+        </svg>
+      </div>
+      <div class="pillar-label">Pilates</div>
+      <div class="pillar-sub">Precision in Practice</div>
+      <div class="pillar-pov">Pilates is where I recenter. The focus required to practice helps ground myself and reset. In the future, one of my goals is to become a certified instructor.</div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="foot-links">
+    <a href="https://www.linkedin.com/in/meganamasa/" target="_blank">LinkedIn</a>
+    <a href="mailto:meganamasa@gmail.com">Email</a>
+  </div>
+  <div class="foot-note">Built with intention. © 2026</div>
+</footer>
+
+<div id="overlay">
+  <button id="ov-close" onclick="closeOv()">Close ×</button>
+  <div id="ov-memo"></div>
+  <div id="ov-demo"></div>
+</div>
+
+<script>
+// CURSOR
+const cur = document.getElementById('cursor'), ring = document.getElementById('cursor-ring');
+let mx=-100, my=-100, rx=-100, ry=-100;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+(function anim() {
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+  rx+=(mx-rx)*.17; ry+=(my-ry)*.17;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(anim);
+})();
+document.querySelectorAll('a,button,.project-card,.pillar').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cg'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cg'));
+});
+
+// NAV
+window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', scrollY > 60));
+
+// TYPEWRITER
+const roles = ['builder','COO','PM','engineer','curious human'];
+let ri=0, ci=0, del=false;
+const tw = document.getElementById('tw');
+function type() {
+  const w = roles[ri];
+  if (!del) { tw.textContent = w.slice(0,++ci); if (ci===w.length) { del=true; setTimeout(type,1900); return; } }
+  else { tw.textContent = w.slice(0,--ci); if (ci===0) { del=false; ri=(ri+1)%roles.length; } }
+  setTimeout(type, del?54:84);
+}
+setTimeout(type,900);
+
+// REVEAL
+const rObs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:.1});
+document.querySelectorAll('.reveal').forEach(el => rObs.observe(el));
+
+// COUNT-UP
+const cObs = new IntersectionObserver(es => es.forEach(e => {
+  if(!e.isIntersecting) return;
+  const el=e.target, t=+el.dataset.target; let v=0;
+  const iv = setInterval(() => { v=Math.min(v+t/42,t); el.textContent=Math.floor(v); if(v>=t) clearInterval(iv); }, 36);
+  cObs.unobserve(el);
+}), {threshold:.5});
+document.querySelectorAll('.count').forEach(el => cObs.observe(el));
+
+// PROJECTS
+const projects = [
+  {
+    co:'Personal Project', name:'Mesa',
+    tagline:'Multi-currency bill splitting built in Madrid. Born from a real pain point.',
+    tags:['React','TypeScript','OpenAI Vision','Vercel'],
+    accent:'#4A8E7E', demo:'https://mesa-8xvqqvjft-megan-amasas-projects.vercel.app/',
+    memo:{
+      problem:'Living abroad with a group means constant friction splitting dinner bills in euros. Existing apps assumed USD. Mesa didn\'t.',
+      solution:'Full-stack bill splitter with OpenAI Vision receipt parsing — snap a receipt, extract line items, assign to people, auto-convert currency. The whole split in under 30 seconds.',
+      stack:'React + TypeScript frontend, Vercel serverless functions, OpenAI Vision API for receipt OCR, real-time FX rate integration.',
+      outcome:'Used daily by a friend group of 12 for four months abroad. Turned a recurring frustration into a 30-second flow.'
+    }
+  },
+  {
+    co:'Fora Travel', name:'ForaU',
+    tagline:'$30K+ revenue from a college travel vertical that didn\'t exist 10 weeks before I joined.',
+    tags:['Product Management','0→1','Growth'],
+    accent:'#1F3A5F', demo:'https://www.foratravel.com/c/fora-u',
+    memo:{
+      problem:'Fora had zero presence among college students — one of the highest-growth travel demographics, with strong viral loops through Greek life, athletics, and campus organizations.',
+      solution:'Launched ForaU end-to-end as a Technical Product intern: positioning, onboarding flow, conversion copy, and campus activation playbook. Ran SQL analysis on 5,000+ customer records to validate the segment. Conducted 100+ user interviews. Built the landing page. Ran a Duke pilot.',
+      stack:'Product strategy, GTM planning, SQL validation, user research, landing page build, advisor onboarding flow design, campus activation.',
+      outcome:'$30K+ revenue. The vertical didn\'t exist before I started. Now live at foratravel.com/c/fora-u.'
+    }
+  },
+  {
+    co:'Agentio', name:'Creator Value Mirror',
+    tagline:'A creator-side analytics layer so creators understand their own data — and can pitch themselves to brands.',
+    tags:['Product Design','Creator Economy','AI'],
+    accent:'#1F3A5F', demo:'https://todoagentio.vercel.app/',
+    memo:{
+      problem:'Agentio unlocked brand-side automation, but creators are flying blind. They have no visibility into how brands see them — no benchmarks, no performance context, no way to self-advocate. As the user research confirmed: "It would be nice to see my stats. Like, see what the brands see in terms of my conversions and click-through rates."',
+      solution:'The Value Mirror: an AI-generated fingerprint surfacing how each creator stacks up (CVR vs. macro avg, CTR above mid avg, engagement rate) plus a growth toggle showing the delta between their current profile and the profile that maximizes brand match coverage. Creators can then pitch themselves directly to aligned brands in the marketplace — with access gated to a few brands per week to avoid diluting the space.',
+      stack:'Existing Agentio infrastructure as the data layer. Delta logic derived from the distribution of active brand queries on the marketplace. AI-generated summary on creator profile output. React profile tab addition.',
+      outcome:'Full spec with user research quotes from creators and talent managers validating the exact pain point. Built and demoed as a working prototype before reaching out to the team.'
+    }
+  },
+  {
+    co:'Profound', name:'Intent-Weighted Sentiment',
+    tagline:'Platform intent as a new dimension of brand sentiment scoring — born from a BERT fine-tuning project.',
+    tags:['BERT','PyTorch','NLP','Feature Design'],
+    accent:'#7B68B8', demo:'https://dist-chi-steel.vercel.app/',
+    memo:{
+      problem:'This past semester I fine-tuned a BERT transformer for sentiment analysis on Rotten Tomatoes in PyTorch. The most consistent failure cases were backhanded compliments and buried praise — places where a single sentiment label was strategically useless. Same insight applied to Profound: blending scores equally across ChatGPT, Claude, and Perplexity flattens a dimension that actually matters. Users aren\'t randomly distributed across platforms. They\'re sorted by intent.',
+      solution:'An aggregation layer on top of Profound\'s existing per-platform scores. The intent weight is the share of a brand\'s category queries originating from a given platform, scaled by how much of that category\'s decision-making actually happens there. Four additions: an Intent Gap callout banner (surfaces when highest-intent platform diverges from blended by 5+ pts), platform breakdown by score strength, per-theme sentiment surfacing by platform, and a Learn More drawer with weight calculation details.',
+      stack:'PyTorch BERT fine-tuned with BCEWithLogitsLoss on Rotten Tomatoes as proof-of-concept. Platform intent weight coefficients derived from prompt volume data. Weighted average scoring layer on top of existing Profound infrastructure.',
+      outcome:'Full technical spec and interactive demo — the BERT coursework served as the intellectual throughline connecting product pitch to engineering credibility.'
+    }
+  },
+  {
+    co:'Bilt Rewards', name:'Smart Insights',
+    tagline:'Redemption clarity at checkout — built after watching a friend get burned at confirmation.',
+    tags:['Product Design','Fintech','React','UX'],
+    accent:'#4A70B8', demo:'https://bilt-smart-insights-demo.vercel.app/',
+    memo:{
+      problem:'A friend booked a NYC trip through Bilt, split her purchase with points and cash hoping to save money — and only realized after hitting confirm that she wasn\'t earning any bonuses. By then it was too late. Reddit and FlyerTalk validated the same: "Please help me understand like I\'m 5 years old." The options are plenty, but the clarity isn\'t.',
+      solution:'Smart Insights dropdown at checkout with four components: (1) Payment Slider — a live calculator showing how splitting with points affects bonus earnings and total booking value. (2) Smart Earning — breaks down booking total, credits auto-applied, out-of-pocket cost, bonus points at card tier rate, and dollar value of those points. (3) Transfer Point Calculator for Hyatt/Marriott partner hotels. (4) Rent Progress Bar showing how this booking moves spend toward the next rent-earning threshold.',
+      stack:'React dropdown component, points valuation API, card tier rate logic, transfer partner rate integration, rent threshold calculation layer.',
+      outcome:'Full product spec and interactive demo built before cold outreach — validated against r/biltrewards threads and 1:1 user interviews.'
+    }
+  },
+  {
+    co:'Ramp', name:'Payment Clarity',
+    tagline:'Bringing incidentals transparency to Ramp Travel — built after fronting a $1,400 hotel deposit on my personal debit card.',
+    tags:['Product Design','Fintech','Corporate Travel'],
+    accent:'#2D6A4F', demo:'https://ramp-travel-prototype.vercel.app/',
+    memo:{
+      problem:'When I traveled as an intern using a mobile Ramp card, I arrived at my hotel to find I needed a $1,400 deposit on my personal card — no physical Ramp card meant no coverage. Then came the $100/night incidental charge. I interviewed 5+ corporate travelers: McKinsey consultants, fintech ops leads, early-stage startup employees. Employees reported fronting $500–$2,000+ per trip, waiting weeks for reimbursement.',
+      solution:'Two layers of control: (1) Admin-side policy enforcement — Prepaid Only (restricts to hotels where the company pays in advance, zero personal card exposure) or Flex Mode with clear labeling. (2) Incidentals at booking — nightly incidental charges displayed directly below hotel rates at point of booking, giving employees time to request additional Ramp card funds before they ever enter the lobby.',
+      stack:'Policy enforcement layer on admin side, hotel prepaid/flex metadata integration, incidentals data surfaced at the booking card level, employee-side filter system.',
+      outcome:'Full product memo with 5+ original user interviews, interactive demo, and cold outreach to the Ramp product team.'
+    }
+  },
+  {
+    co:'Notion', name:'Guest Editing',
+    tagline:'Turning shared links into a PLG moment — guest editing without requiring an account.',
+    tags:['Product Design','PLG','Growth','Technical Spec'],
+    accent:'#1A1917', demo:'https://todonotion.vercel.app/',
+    memo:{
+      problem:'I use Notion every day — for class, for work, for everything. But the moment I need to share notes with a classmate or give my professor commenter access, I hit friction. I can\'t assume everyone has an account, so I end up exporting to Google Docs. On two fronts: the visitor misses what makes Notion amazing (the block editor, slash commands, AI agents), and Notion loses a high-intent acquisition moment. Someone opening a shared Notion doc is already sticky — they\'ve come from a trusted source. It\'s a lo-fi referral.',
+      solution:'Short-lived, scoped edit tokens on shared links. Tokens grant write access to that page only within a sandboxed session — changes attributed to "Guest (session #XXXX)" in version history. After editing: "Save your changes? Create a free Notion account." The action becomes a signup trigger. The shared link becomes a PLG moment, not a dead end.',
+      stack:'The hard part is Notion\'s workspace-first architecture — pages are nodes in a relational graph, not self-contained files. Guest edits need sandboxed sessions that don\'t traverse workspace relations, plus session metadata (timestamp, IP hash, optional email prompt post-edit) for auditability without requiring upfront auth.',
+      outcome:'Built a working demo — owner view, guest view with random session ID, live block editing, and a version history panel logging all edits with session IDs and timestamps.'
+    }
+  },
+  {
+    co:'Listen Labs', name:'Smart Estimator',
+    tagline:'A personalized cost-of-slow-research visualizer built on a RAG layer against Listen\'s own historical study data.',
+    tags:['RAG','Product Design','Growth Tool'],
+    accent:'#6B4A8E', demo:'https://todolistenlabs.vercel.app/',
+    memo:{
+      problem:'When potential customers land on Listen, the inflection point isn\'t "cheaper or faster" — it\'s "meaningfully better in a way that maps to my specific situation." A head of research at CPG and a growth PM at fintech both need user research but understand Listen\'s value in completely different terms. Flat benchmarks don\'t land.',
+      solution:'Smart Estimator: user inputs their research question, industry, role, and participant scope. A multi-dimensional matching algorithm retrieves structurally similar past studies from Listen\'s Research Library — matching simultaneously on research objective, target participant profile, study scale, and industry. Output: a personalized before/after visualization, not a generic calculator. Privacy architecture built in: anonymized metadata only, no raw study content, prompt injection guardrails.',
+      stack:'RAG layer on Listen\'s existing study corpus (Research Library as backbone). Multi-dimensional retrieval weighting objective + participant + scale + industry. Client opt-in model for metadata contribution.',
+      outcome:'Full technical spec with privacy architecture included — proposed as a top-of-funnel growth tool, not just a product feature.'
+    }
+  }
+];
+
+const workGrid = document.getElementById('work-grid');
+const demosGrid = document.getElementById('demos-grid');
+projects.forEach((p, i) => {
+  const card = document.createElement('div');
+  card.className = 'project-card reveal';
+  card.style.setProperty('--card-accent', p.accent);
+  card.innerHTML = `<div class="card-company">${p.co}</div><div class="card-name">${p.name}</div><p class="card-tagline">${p.tagline}</p><div class="card-tags">${p.tags.map(t=>`<span class="card-tag">${t}</span>`).join('')}</div><div class="card-cta">View case study →</div>`;
+  card.addEventListener('click', () => openProject(p));
+  (i < 2 ? workGrid : demosGrid).appendChild(card);
+  rObs.observe(card);
+});
+
+function openProject(p) {
+  document.getElementById('ov-memo').innerHTML = `<div class="ov-co">${p.co}</div><h2 class="ov-title">${p.name}</h2><div class="ov-body"><div class="ov-sec">The Problem</div><p>${p.memo.problem}</p><div class="ov-sec">The Solution</div><p>${p.memo.solution}</p><div class="ov-sec">Stack</div><p>${p.memo.stack}</p><div class="ov-sec">Outcome</div><p>${p.memo.outcome}</p></div>`;
+  document.getElementById('ov-demo').innerHTML = p.demo
+    ? `<div class="ov-demo-inner"><div class="ov-demo-label">Live Demo</div><a href="${p.demo}" target="_blank" class="ov-demo-btn">Open ${p.name} →</a></div>`
+    : `<div class="ov-demo-inner"><div style="font-size:48px;opacity:.12;color:#1A1917;letter-spacing:-4px">· ◇ ·</div><div class="ov-demo-label">Demo available on request</div></div>`;
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+// PILLARS
+const pillars = {
+  ai: {
+    eyebrow:'Beyond the Build',
+    title:'AI Meets Behavior',
+    body:[
+      "AI is the layer of technology I find most interesting right now — not the models themselves, but the intersection between them and the humans using them. We're living through the fastest shift in how consumers relate to technology in a generation, and that intersection is where the most interesting questions live.",
+      "I wrote this paper as one entry point into that intersection — looking specifically at how university students are using AI tools and how those tools are showing up in their lives. The research surfaces a nuanced picture: AI isn't categorically good or bad, but it interacts with existing patterns in ways the literature is just starting to map. Productivity AI like ChatGPT plays a different role than entertainment AI like TikTok, and both are worth studying as separate dynamics.",
+      "What I keep coming back to is the bigger question the paper opens up: as large language models keep advancing, how does the relationship between AI and consumer behavior evolve? That frontier — where the model meets the person — is the most interesting thing happening in tech right now."
+    ],
+    paperLabel:'Open paper',
+    paperUrl:'./ai-burnout-paper.pdf'
+  },
+  health: {
+    eyebrow:'Beyond the Build',
+    title:'Holistic Health',
+    body:[
+      "In high school I spent years working on youth mental-health policy. The more time I spent in the space, the more one thing kept surfacing: a student's environment — their social circles, the spaces they moved through, the digital lives running in the background — shaped their mental state in ways the clinical model rarely accounted for.",
+      "I wrote this paper to make that argument rigorously. It draws on research into social contagion, Western beauty norms, and the digital age to show that what we call \"mental illness\" is often a downstream response to a toxic upstream environment — not a fixed, purely physical condition.",
+      "That conclusion is what pulled me into holistic health more broadly. Sleep, training, food, light exposure, stress load — every input compounds, and the body is the system that integrates all of them. It's become a genuine obsession: I read about it constantly, and the more I learn the more the field opens up.",
+      "The resource I come back to most is the <a href=\"https://open.spotify.com/show/79CkJF3UJTHFV8Dse3Oy0P\" target=\"_blank\">Huberman Lab podcast</a> — Andrew Huberman is a Stanford neuroscientist who breaks down the research and translates it into protocols you can actually use. Best ongoing education I've found on any of this."
+    ],
+    paperLabel:'Open paper',
+    paperUrl:'./social-contagion-paper.pdf'
+  }
+};
+
+function openPillar(p) {
+  document.getElementById('ov-memo').innerHTML = `<div class="ov-co">${p.eyebrow}</div><h2 class="ov-title">${p.title}</h2><div class="ov-body">${p.body.map(t=>`<p>${t}</p>`).join('')}</div>`;
+  document.getElementById('ov-demo').innerHTML = p.paperUrl
+    ? `<div class="ov-paper-pane"><iframe src="${p.paperUrl}#view=FitH" class="ov-paper-frame"></iframe><a href="${p.paperUrl}" target="_blank" class="ov-demo-btn">${p.paperLabel} →</a></div>`
+    : `<div class="ov-demo-inner"><div style="font-size:48px;opacity:.12;color:#1A1917;letter-spacing:-4px">· ◇ ·</div><div class="ov-demo-label">Paper coming soon</div></div>`;
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+document.querySelectorAll('.pillar[data-pillar]').forEach(el => {
+  const key = el.getAttribute('data-pillar');
+  if (pillars[key]) el.addEventListener('click', () => openPillar(pillars[key]));
+});
+
+function closeOv() { document.getElementById('overlay').classList.remove('open'); document.body.style.overflow=''; }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeOv(); });
+document.getElementById('overlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeOv(); });
+</script>
+</body>
+</html>
